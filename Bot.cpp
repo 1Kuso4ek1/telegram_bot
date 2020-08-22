@@ -47,7 +47,6 @@ void Bot::Update()
 		std::cout << curl_easy_strerror(res) << std::endl;
 	}
 	Json::Value root = Parse();
-	Parse();
 	message_id = root["result"][root["result"].size() - 1]["message"]["message_id"].asInt64();
 	message = root["result"][root["result"].size() - 1]["message"]["text"].asString();
 	chat_id = root["result"][root["result"].size() - 1]["message"]["from"]["id"].asInt64();
