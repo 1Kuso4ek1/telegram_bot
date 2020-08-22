@@ -18,16 +18,19 @@ public:
 private:
 	static size_t write_data(char* ptr, size_t size, size_t nmemb, std::string* data);
 	Json::Value Parse();
-private:
+
 	Json::CharReaderBuilder builder;
 	Json::Value root;
 	JSONCPP_STRING err;
+	
 	CURL* curl;
 	CURLcode res;
+	
 	std::string content;
 	std::string apiurl;
 	std::string message;
 	std::string username;
+	
 	int chat_id;
 	long long message_id;
 };

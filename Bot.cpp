@@ -1,5 +1,23 @@
 #include "Bot.h"
 
+Bot::Bot(std::string apiurl) : apiurl(apiurl)
+{
+	curl = curl_easy_init();
+	curl_global_init(CURL_GLOBAL_DEFAULT);
+	if (curl)
+	{
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, TRUE);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &content);
+	}
+}
+
+Bot::~Bot()
+{
+	curl_easy_cleanup(curl);
+}
+
 size_t Bot::write_data(char* ptr, size_t size, size_t nmemb, std::string* data)
 {
 	if (data)
@@ -23,24 +41,6 @@ Json::Value Bot::Parse()
 	}
 	return root;
 }
-Bot::Bot(std::string apiurl) : apiurl(apiurl)
-{
-	curl = curl_easy_init();
-	curl_global_init(CURL_GLOBAL_DEFAULT);
-	if (curl)
-	{
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, TRUE);
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &content);
-	}
-}
-
-Bot::~Bot()
-{
-	curl_easy_cleanup(curl);
-}
-
 void Bot::Update()
 {
 	curl_easy_setopt(curl, CURLOPT_URL, (apiurl + "getUpdates").c_str());
