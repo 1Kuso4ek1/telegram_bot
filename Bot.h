@@ -10,10 +10,12 @@ class Bot
 public:
 	Bot(std::string apiurl);
 	~Bot();
+	
 	void Update();
 	void Send(std::string text, int chat_id);
+	
 	std::string GetLastMessage();
-	std::string GetUsername();
+
 	int GetChatId();
 	long long GetMessageId();
 private:

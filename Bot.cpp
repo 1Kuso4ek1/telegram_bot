@@ -75,11 +75,6 @@ std::string Bot::GetLastMessage()
 	return message;
 }
 
-std::string Bot::GetUsername()
-{
-	return username;
-}
-
 int Bot::GetChatId()
 {
 	return chat_id;
