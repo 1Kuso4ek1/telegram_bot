@@ -2,21 +2,23 @@
 
 size_t Bot::write_data(char* ptr, size_t size, size_t nmemb, std::string* data)
 {
-	if (data) {
+	if (data)
+	{
 		data->append(ptr, size * nmemb);
 		return size * nmemb;
 	}
-	else {
+	else
+	{
 		return 0;
 	}
 }
+
 Json::Value Bot::Parse()
 {
-	Json::CharReaderBuilder builder;
 	Json::Value root;
-	JSONCPP_STRING err;
 	const std::unique_ptr<Json::CharReader> reader(builder.newCharReader());
-	if (!reader->parse(content.c_str(), content.c_str() + content.size(), &root, &err)) {
+	if (!reader->parse(content.c_str(), content.c_str() + content.size(), &root, &err))
+	{
 		std::cout << "error" << std::endl;
 	}
 	return root;
@@ -25,7 +27,8 @@ Bot::Bot(std::string apiurl) : apiurl(apiurl)
 {
 	curl = curl_easy_init();
 	curl_global_init(CURL_GLOBAL_DEFAULT);
-	if (curl) {
+	if (curl)
+	{
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, TRUE);
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
@@ -42,23 +45,26 @@ void Bot::Update()
 {
 	curl_easy_setopt(curl, CURLOPT_URL, (apiurl + "getUpdates").c_str());
 	res = curl_easy_perform(curl);
-	if (res != CURLE_OK) {
+	if (res != CURLE_OK)
+	{
 		std::cout << "Error!" << std::endl;
 		std::cout << curl_easy_strerror(res) << std::endl;
 	}
-	Json::Value root = Parse();
+	root = Parse();
 	message_id = root["result"][root["result"].size() - 1]["message"]["message_id"].asInt64();
 	message = root["result"][root["result"].size() - 1]["message"]["text"].asString();
-	chat_id = root["result"][root["result"].size() - 1]["message"]["from"]["id"].asInt64();
+	chat_id = root["result"][root["result"].size() - 1]["message"]["from"]["id"].asInt();
 }
 
 void Bot::Send(std::string text, int chat_id)
 {
-	if (curl) {
+	if (curl)
+	{
 		curl_easy_setopt(curl, CURLOPT_URL, (apiurl + "sendMessage?chat_id=" + std::to_string(chat_id) + "&text=" + text).c_str());
 	}
 	res = curl_easy_perform(curl);
-	if (res != CURLE_OK) {
+	if (res != CURLE_OK)
+	{
 		std::cout << "Error!" << std::endl;
 		std::cout << curl_easy_strerror(res) << std::endl;
 	}
