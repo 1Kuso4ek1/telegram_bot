@@ -1,2 +1,2 @@
 # telegram_bot
-Simple library for telegram bot api. Need libcurl with ssl, jsoncpp.
+Simple library for telegram bot api. Need libcurl with openssl, jsoncpp.
